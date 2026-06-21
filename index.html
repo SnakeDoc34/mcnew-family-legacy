@@ -401,8 +401,8 @@
     var narrativeHTML = '<div class="era-ordinal">' + era.ordinal + ' &middot; ' + era.range + '</div>' +
       '<h2 class="era-heading">' + era.title + '</h2>' +
       '<div class="figures-block"><div class="figures-label">Key Figures</div><div class="figures-text">' + era.figures + '</div></div>' +
-      '<div class="narrative-body">' + era.narrative.map(function(p){ return '<p>' + p + '</p>'; }).join('') + '</div>' +
-      featureHTML;
+
+      '<div class="narrative-body">' + era.narrative.map(function(p){ return '<p>' + p + '</p>'; }).join('') + '</div>';
 
     // Gallery HTML
     var galleryHTML = '<div class="gallery-head">' +
@@ -420,8 +420,14 @@
       }).join('') +
       '</div>';
 
+    // Full-width feature block above the two-column split (if era has one)
+    var fullWidthFeature = featureHTML
+      ? '<div style="grid-column:1/-1;animation:fadein .38s ease both;">' + featureHTML + '</div>'
+      : '';
+
     var wrap = document.getElementById('era-content');
-    wrap.innerHTML = '<div style="animation:fadein .38s ease both">' + narrativeHTML + '</div>' +
+    wrap.innerHTML = fullWidthFeature +
+      '<div style="animation:fadein .38s ease both">' + narrativeHTML + '</div>' +
       '<div style="animation:fadein .38s ease both .06s">' + galleryHTML + '</div>';
   }
 
