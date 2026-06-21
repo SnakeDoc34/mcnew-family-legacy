@@ -182,6 +182,7 @@
       <div class="timeline-buttons" id="timeline-btns"></div>
     </div>
   </nav>
+  <div id="era-feature" style="max-width:1320px;margin:0 auto;padding:44px 48px 0;"></div>
   <div class="main-wrap" id="era-content"></div>
 </div>
 
@@ -421,13 +422,14 @@
       '</div>';
 
     // Full-width feature block above the two-column split (if era has one)
-    var fullWidthFeature = featureHTML
-      ? '<div style="grid-column:1/-1;animation:fadein .38s ease both;">' + featureHTML + '</div>'
+    var featureContainer = document.getElementById('era-feature');
+    featureContainer.innerHTML = featureHTML
+      ? '<div style="animation:fadein .38s ease both;">' + featureHTML + '</div>'
       : '';
 
     var wrap = document.getElementById('era-content');
-    wrap.innerHTML = fullWidthFeature +
-      '<div style="animation:fadein .38s ease both">' + narrativeHTML + '</div>' +
+    wrap.style.paddingTop = featureHTML ? '32px' : '44px';
+    wrap.innerHTML = '<div style="animation:fadein .38s ease both">' + narrativeHTML + '</div>' +
       '<div style="animation:fadein .38s ease both .06s">' + galleryHTML + '</div>';
   }
 
