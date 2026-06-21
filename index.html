@@ -182,7 +182,6 @@
       <div class="timeline-buttons" id="timeline-btns"></div>
     </div>
   </nav>
-  <div id="era-feature" style="max-width:1320px;margin:0 auto;padding:44px 48px 0;"></div>
   <div class="main-wrap" id="era-content"></div>
 </div>
 
@@ -394,9 +393,9 @@
       }
       var heroHTML = '';
       if (f.image) {
-        heroHTML = '<div style="position:relative;aspect-ratio:16/7;overflow:hidden;"><img src="' + f.image + '" alt="' + f.kicker + '" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.55);"><div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:22px 26px;background:linear-gradient(to top,rgba(14,22,38,.85) 0%,transparent 60%);"><div style="font-family:Archivo,sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#C7A659;font-weight:700;margin-bottom:6px;">' + f.kicker + '</div><div style="font-family:Merriweather,serif;font-weight:900;font-size:18px;color:#EDE4CB;line-height:1.2;">' + f.title + '</div><div style="font-family:Merriweather,serif;font-style:italic;font-size:12px;color:#B9C2D2;margin-top:5px;">' + (f.imageCaption || '') + '</div></div></div>';
+        heroHTML = '<div style="position:relative;height:280px;overflow:hidden;border-radius:4px;margin-bottom:20px;"><img src="' + f.image + '" alt="' + f.kicker + '" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.55);"><div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:18px 20px;background:linear-gradient(to top,rgba(14,22,38,.88) 0%,transparent 55%);"><div style="font-family:Archivo,sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#C7A659;font-weight:700;margin-bottom:6px;">' + f.kicker + '</div><div style="font-family:Merriweather,serif;font-weight:900;font-size:19px;color:#EDE4CB;line-height:1.15;">' + f.title + '</div><div style="font-family:Merriweather,serif;font-style:italic;font-size:12px;color:#B9C2D2;margin-top:5px;">' + (f.imageCaption || '') + '</div></div></div>';
       }
-      featureHTML = '<div class="feature-block">' + heroHTML + '<div class="feature-inner"><div class="feature-kicker">' + f.kicker + '</div><h3 class="feature-title">' + f.title + '</h3><div class="feature-points">' + pointsHTML + '</div></div>' + videoHTML + '</div>';
+      featureHTML = heroHTML + '<div style="background:#1C2E4A;background-image:linear-gradient(180deg,#223961,#1A2B47);border-radius:6px;overflow:hidden;color:#EDE4CB;box-shadow:0 6px 22px rgba(28,46,74,.28);margin-bottom:24px;"><div style="padding:22px 24px 20px;"><div style="font-family:Archivo,sans-serif;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#C7A659;font-weight:700;margin-bottom:10px;">' + f.kicker + ' &mdash; Role & Combat</div><div style="display:flex;flex-direction:column;gap:12px;">' + pointsHTML + '</div></div>' + videoHTML + '</div>';
     }
 
     var narrativeHTML = '<div class="era-ordinal">' + era.ordinal + ' &middot; ' + era.range + '</div>' +
@@ -422,15 +421,13 @@
       '</div>';
 
     // Full-width feature block above the two-column split (if era has one)
-    var featureContainer = document.getElementById('era-feature');
-    featureContainer.innerHTML = featureHTML
-      ? '<div style="animation:fadein .38s ease both;">' + featureHTML + '</div>'
-      : '';
-
+    // Feature goes at top of gallery column (right side)
     var wrap = document.getElementById('era-content');
-    wrap.style.paddingTop = featureHTML ? '32px' : '44px';
     wrap.innerHTML = '<div style="animation:fadein .38s ease both">' + narrativeHTML + '</div>' +
-      '<div style="animation:fadein .38s ease both .06s">' + galleryHTML + '</div>';
+      '<div style="animation:fadein .38s ease both .06s">' + 
+        (featureHTML ? '<div>' + featureHTML + '</div>' : '') +
+        galleryHTML + 
+      '</div>';
   }
 
   // ── SERVICE ─────────────────────────────────────────────────
