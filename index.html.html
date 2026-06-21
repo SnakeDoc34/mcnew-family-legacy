@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The McNew Family Legacy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=Archivo:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    body { font-family: Merriweather, Georgia, serif; color: #2A2620; background: #ECE3CC; }
+    @keyframes fadein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    ::selection { background: rgba(160,125,48,.28); }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: #1C2E4A;
+      background-image: linear-gradient(180deg, #223961, #1A2B47);
+      color: #EDE4CB;
+      padding: 32px 48px 28px;
+      border-bottom: 3px solid #A07D30;
+    }
+    .site-header-inner { max-width: 1320px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+    .site-header-kicker { font-family: Archivo, sans-serif; font-size: 10.5px; letter-spacing: .32em; text-transform: uppercase; color: #C7A659; display: block; margin-bottom: 11px; }
+    .site-header h1 { font-family: Merriweather, serif; font-weight: 900; font-size: 46px; line-height: 1; margin: 0; }
+    .site-header h1 .gold { color: #CDA75A; }
+    .site-header-sub { font-style: italic; color: #B9C2D2; font-size: 16px; margin: 12px 0 0; }
+    .site-header-byline { text-align: right; font-family: Archivo, sans-serif; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #8E9BB1; line-height: 1.9; padding-bottom: 4px; }
+    .site-header-byline strong { color: #EDE4CB; font-size: 12px; letter-spacing: .1em; }
+
+    /* ── VIEW SWITCHER ── */
+    .view-bar { background: #1C2E4A; padding: 0 48px; border-bottom: 3px solid #A07D30; display: flex; gap: 0; }
+    .view-btn { font-family: Archivo, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #8E9BB1; background: none; border: none; border-bottom: 3px solid transparent; margin-bottom: -3px; padding: 16px 24px; cursor: pointer; transition: color .2s, border-color .2s; }
+    .view-btn:hover { color: #C7A659; }
+    .view-btn.active { color: #EDE4CB; border-bottom-color: #A07D30; }
+
+    /* ── TIMELINE NAV ── */
+    .timeline-nav { background: #F1E8CF; border-bottom: 1px solid #D7CBA6; padding: 26px 48px 24px; box-shadow: 0 1px 0 rgba(255,255,255,.6) inset; }
+    .timeline-inner { max-width: 1320px; margin: 0 auto; position: relative; }
+    .timeline-line { position: absolute; left: 7%; right: 7%; top: 8px; height: 2px; background: linear-gradient(90deg, transparent, #C3B485 12%, #C3B485 88%, transparent); pointer-events: none; }
+    .timeline-buttons { position: relative; display: flex; justify-content: space-between; gap: 14px; }
+    .era-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; }
+    .era-dot { width: 14px; height: 14px; border-radius: 50%; background: #FBF6E6; border: 2px solid #97A2B6; box-shadow: 0 0 0 4px #F1E8CF; transition: all .25s; }
+    .era-btn.active .era-dot { background: #A07D30; border-color: #A07D30; box-shadow: 0 0 0 4px #F1E8CF, 0 0 0 6px rgba(160,125,48,.35); }
+    .era-range { font-family: Archivo, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: .1em; color: #A99C7E; transition: color .2s; }
+    .era-btn.active .era-range { color: #8A6A1E; font-weight: 700; }
+    .era-title { font-family: Merriweather, serif; font-size: 13px; font-weight: 400; color: #9A8E76; text-align: center; line-height: 1.25; transition: color .2s; }
+    .era-btn.active .era-title { color: #1C2E4A; font-weight: 700; }
+
+    /* ── MAIN LAYOUT ── */
+    .main-wrap { max-width: 1320px; margin: 0 auto; padding: 44px 48px 72px; display: grid; grid-template-columns: minmax(340px, 1fr) 1.45fr; gap: 52px; }
+    .main-wrap.hidden { display: none; }
+
+    /* ── NARRATIVE ── */
+    .era-ordinal { font-family: Archivo, sans-serif; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: #A07D30; font-weight: 700; margin-bottom: 10px; }
+    .era-heading { font-family: Merriweather, serif; font-weight: 900; font-size: 34px; line-height: 1.08; color: #1C2E4A; margin: 0 0 18px; }
+    .figures-block { border-left: 3px solid #A07D30; padding-left: 15px; margin-bottom: 26px; }
+    .figures-label { font-family: Archivo, sans-serif; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #6A604E; font-weight: 700; margin-bottom: 4px; }
+    .figures-text { font-family: Merriweather, serif; font-style: italic; font-size: 15px; color: #3A4256; line-height: 1.5; }
+    .narrative-body p { font-size: 16px; line-height: 1.72; color: #3a352b; margin: 0 0 16px; text-wrap: pretty; }
+
+    /* ── FEATURE BLOCK ── */
+    .feature-block { margin-top: 32px; background: #1C2E4A; background-image: linear-gradient(180deg, #223961, #1A2B47); border-radius: 6px; overflow: hidden; color: #EDE4CB; box-shadow: 0 6px 22px rgba(28,46,74,.28); }
+    .feature-inner { padding: 28px 28px 24px; }
+    .feature-kicker { font-family: Archivo, sans-serif; font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase; color: #C7A659; font-weight: 700; margin-bottom: 8px; }
+    .feature-title { font-family: Merriweather, serif; font-weight: 900; font-size: 20px; color: #EDE4CB; margin: 0 0 20px; line-height: 1.2; }
+    .feature-points { display: flex; flex-direction: column; gap: 14px; }
+    .feature-point { display: flex; gap: 12px; }
+    .feature-point-dot { flex-shrink: 0; width: 7px; height: 7px; border-radius: 50%; background: #A07D30; margin-top: 6px; }
+    .feature-point-text { font-size: 14.5px; line-height: 1.55; color: #C8D2E4; }
+    .feature-point-text strong { color: #EDE4CB; }
+    .feature-video { border-top: 1px solid rgba(255,255,255,.1); padding: 20px 28px 24px; }
+    .feature-video-label { font-family: Archivo, sans-serif; font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase; color: #C7A659; font-weight: 700; margin-bottom: 10px; }
+    .feature-video iframe { width: 100%; aspect-ratio: 16/9; border: none; border-radius: 3px; display: block; }
+
+    /* ── GALLERY ── */
+    .gallery-head { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid #D7CBA6; padding-bottom: 11px; margin-bottom: 20px; }
+    .gallery-head-title { font-family: Archivo, sans-serif; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #6A604E; font-weight: 700; }
+    .gallery-head-count { font-family: Archivo, sans-serif; font-size: 11px; letter-spacing: .1em; color: #A07D30; font-weight: 700; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 18px; }
+
+    /* ── TILE ── */
+    .tile { display: block; text-align: left; padding: 0; border: 1px solid #D7CBA6; border-radius: 4px; overflow: hidden; background: #F6EFDB; cursor: pointer; box-shadow: 0 1px 2px rgba(28,46,74,.06); transition: transform .18s, box-shadow .18s, border-color .18s; width: 100%; }
+    .tile:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(28,46,74,.20); border-color: #A07D30; }
+    .tile-img-wrap { aspect-ratio: 4/3; overflow: hidden; background: #1C2E4A; border-bottom: 1px solid #D7CBA6; }
+    .tile-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tile-pdf-wrap { aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; background: #F2E9D2; background-image: repeating-linear-gradient(180deg, #F2E9D2, #F2E9D2 20px, #E6DAB9 21px); border-bottom: 1px solid #D7CBA6; }
+    .pdf-icon { position: relative; width: 48px; height: 60px; background: #FBF6E6; border: 1.5px solid #1C2E4A; border-radius: 2px; box-shadow: 0 3px 8px rgba(28,46,74,.2); display: flex; align-items: flex-end; justify-content: center; }
+    .pdf-icon::before { content: ''; position: absolute; top: -1px; right: -1px; width: 0; height: 0; border-top: 14px solid #1C2E4A; border-left: 14px solid transparent; }
+    .pdf-icon span { font-family: Archivo, sans-serif; font-weight: 700; font-size: 9px; letter-spacing: .08em; color: #A07D30; padding-bottom: 8px; }
+    .tile-meta { padding: 11px 13px 13px; }
+    .tile-kind { font-family: Archivo, sans-serif; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #A07D30; font-weight: 700; margin-bottom: 5px; }
+    .tile-name { font-family: Merriweather, serif; font-size: 13px; line-height: 1.32; color: #23324d; font-weight: 700; }
+
+    /* ── SERVICE VIEW ── */
+    .service-wrap { max-width: 1100px; margin: 0 auto; padding: 48px 48px 80px; }
+    .service-wrap.hidden { display: none; }
+    .service-header { margin-bottom: 44px; }
+    .service-header h2 { font-family: Merriweather, serif; font-weight: 900; font-size: 38px; color: #1C2E4A; margin: 0 0 10px; }
+    .service-header p { font-size: 17px; line-height: 1.7; color: #4a4235; max-width: 760px; margin: 0; }
+    .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px; }
+    .service-card { background: #F6EFDB; border: 1px solid #D7CBA6; border-radius: 4px; padding: 26px 26px 24px; box-shadow: 0 1px 4px rgba(28,46,74,.07); }
+    .service-card-war { font-family: Archivo, sans-serif; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #A07D30; font-weight: 700; margin-bottom: 8px; }
+    .service-card-name { font-family: Merriweather, serif; font-weight: 900; font-size: 21px; color: #1C2E4A; margin: 0 0 4px; }
+    .service-card-rank { font-family: Merriweather, serif; font-style: italic; font-size: 14px; color: #5A6A8A; margin: 0 0 14px; }
+    .service-card-body { font-size: 14.5px; line-height: 1.65; color: #3a352b; }
+    .service-divider { border: none; border-top: 2px solid #A07D30; opacity: .25; margin: 32px 0; }
+    .service-heritage { background: #1C2E4A; border-radius: 6px; padding: 32px 36px; color: #EDE4CB; margin-top: 36px; }
+    .service-heritage h3 { font-family: Merriweather, serif; font-weight: 900; font-size: 22px; color: #CDA75A; margin: 0 0 14px; }
+    .service-heritage p { font-size: 15px; line-height: 1.7; color: #B9C2D2; margin: 0 0 14px; }
+    .service-heritage p:last-child { margin-bottom: 0; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox { position: fixed; inset: 0; z-index: 300; background: rgba(14, 18, 28, .95); display: flex; align-items: center; justify-content: center; padding: 40px 88px; opacity: 1; transition: opacity .2s; }
+    .lightbox.hidden { display: none; }
+    .lb-prev, .lb-next { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(199,166,89,.45); background: rgba(28,46,74,.55); color: #EDE4CB; font-size: 26px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .18s, color .18s; z-index: 10; }
+    .lb-prev { left: 24px; }
+    .lb-next { right: 24px; }
+    .lb-prev:hover, .lb-next:hover { background: #A07D30; color: #1C2E4A; }
+    .lb-body { position: relative; max-width: 1040px; width: 100%; display: flex; flex-direction: column; align-items: center; animation: fadein .28s ease both; }
+    .lb-topbar { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 14px; }
+    .lb-counter { font-family: Archivo, sans-serif; font-size: 12px; letter-spacing: .2em; font-weight: 700; color: #C9B98C; }
+    .lb-close { font-family: Archivo, sans-serif; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; color: #EDE4CB; background: none; border: 1px solid rgba(199,166,89,.45); border-radius: 3px; padding: 7px 14px; cursor: pointer; transition: background .18s, color .18s, border-color .18s; }
+    .lb-close:hover { background: #A07D30; color: #1C2E4A; border-color: #A07D30; }
+    .lb-media img { max-width: 100%; max-height: 70vh; object-fit: contain; border: 7px solid #EDE4CB; box-shadow: 0 28px 70px rgba(0,0,0,.55); background: #fff; display: block; }
+    .lb-media iframe { width: min(960px, 86vw); height: 70vh; border: 7px solid #EDE4CB; box-shadow: 0 28px 70px rgba(0,0,0,.55); background: #fff; display: block; }
+    .lb-info { margin-top: 18px; text-align: center; max-width: 720px; }
+    .lb-title { font-family: Merriweather, serif; font-weight: 700; font-size: 17px; color: #EDE4CB; }
+    .lb-caption { font-family: Merriweather, serif; font-style: italic; font-size: 13.5px; color: #B9C2D2; margin-top: 7px; line-height: 1.5; }
+    .lb-open { display: inline-block; margin-top: 13px; font-family: Archivo, sans-serif; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; color: #C7A659; text-decoration: none; border-bottom: 1px solid rgba(199,166,89,.4); padding-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#ECE3CC"/>
+    <rect width="1200" height="130" fill="#1C2E4A"/>
+    <rect y="130" width="1200" height="4" fill="#A07D30"/>
+    <text x="600" y="350" font-family="Georgia,serif" font-size="80" font-weight="900" text-anchor="middle" fill="#1C2E4A">McNew</text>
+    <text x="600" y="430" font-family="Georgia,serif" font-size="42" text-anchor="middle" fill="#A07D30" font-style="italic">Family Legacy</text>
+    <line x1="300" y1="490" x2="900" y2="490" stroke="#A07D30" stroke-width="2"/>
+    <circle cx="300" cy="570" r="16" fill="#A07D30"/>
+    <circle cx="500" cy="570" r="16" fill="#C3B485"/>
+    <circle cx="700" cy="570" r="16" fill="#C3B485"/>
+    <circle cx="900" cy="570" r="16" fill="#C3B485"/>
+    <line x1="316" y1="570" x2="484" y2="570" stroke="#C3B485" stroke-width="2"/>
+    <line x1="516" y1="570" x2="684" y2="570" stroke="#C3B485" stroke-width="2"/>
+    <line x1="716" y1="570" x2="884" y2="570" stroke="#C3B485" stroke-width="2"/>
+  </svg>
+</template>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <div>
+      <span class="site-header-kicker">A Family History Archive &middot; 1640&ndash;Present</span>
+      <h1>The <span class="gold">McNew</span> Family Legacy</h1>
+      <p class="site-header-sub">Eleven generations and four hundred years &mdash; from a Scottish immigrant to an American pharmacist.</p>
+    </div>
+    <div class="site-header-byline">
+      Prepared by Dustin McNew<br>
+      for<br>
+      <strong>Robert Morris McNew</strong>
+    </div>
+  </div>
+</header>
+
+<!-- VIEW BAR -->
+<div class="view-bar">
+  <button class="view-btn active" data-view="chronicle">The Family Chronicle</button>
+  <button class="view-btn" data-view="service">A Thread of Service</button>
+</div>
+
+<!-- CHRONICLE VIEW -->
+<div id="view-chronicle">
+  <nav class="timeline-nav">
+    <div class="timeline-inner">
+      <div class="timeline-line"></div>
+      <div class="timeline-buttons" id="timeline-btns"></div>
+    </div>
+  </nav>
+  <div class="main-wrap" id="era-content"></div>
+</div>
+
+<!-- SERVICE VIEW -->
+<div id="view-service" class="hidden">
+  <div class="service-wrap">
+    <div class="service-header">
+      <h2>A Thread of Service</h2>
+      <p>For nearly four centuries, the McNew family has answered the call — from the early American frontier to the mountains of Afghanistan. This is the unbroken thread of their service.</p>
+    </div>
+    <div class="service-grid" id="service-cards"></div>
+    <div class="service-heritage">
+      <h3>A Heritage of Units: The 4th Alabama &amp; the 19th Alabama</h3>
+      <p>The McNew family's military heritage runs in two parallel lines. William Henry McNew fought in the 19th Alabama Infantry, C.S.A., a regiment that bore the heaviest fighting across the Western Theater — Shiloh, Chickamauga, the Atlanta Campaign, Franklin, and Nashville. Though forged in a cause history rightly condemns, William's endurance and survival across four years of hard war is a remarkable human story.</p>
+      <p>A century later, Dustin McNew served with the 167th Infantry, Alabama Army National Guard — a unit that traces its direct lineage to the 4th Alabama Volunteer Infantry of the Civil War. The 4th Alabama, like the 19th, fought under the Confederate banner in Virginia and the Eastern Theater, including the Battle of Bull Run and Gettysburg. The 4th Alabama and the 19th Alabama were brother units forged in the same conflict, but on different fronts — and their descendants continue to serve, generation after generation, under a different flag and a different cause.</p>
+      <p>Dustin's deployment to Afghanistan with the 167th Infantry completes a circle nearly 160 years in the making: a McNew once again bearing arms under an Alabama regiment, this time in service of the nation rather than against it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox hidden">
+  <button class="lb-prev" id="lb-prev">&#8249;</button>
+  <button class="lb-next" id="lb-next">&#8250;</button>
+  <div class="lb-body" id="lb-body">
+    <div class="lb-topbar">
+      <div class="lb-counter" id="lb-counter"></div>
+      <button class="lb-close" id="lb-close">Close &#10005;</button>
+    </div>
+    <div class="lb-media" id="lb-media"></div>
+    <div class="lb-info">
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-caption" id="lb-caption"></div>
+      <a class="lb-open" id="lb-open" href="#" target="_blank" rel="noopener">Open original &#8599;</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── DATA ─────────────────────────────────────────────────────
+  var ERAS = [
+    {
+      ordinal: 'Era I', range: '1640\u20131835',
+      title: 'The American Frontier',
+      figures: 'Jeremiah Macknew \u00b7 Shadrack McNew \u00b7 Elijah & Joanna Bowman McNew',
+      narrative: [
+        'The McNew story opens with Jeremiah Macknew, born about 1640 in Scotland, who crossed the Atlantic and settled in Prince George\u2019s County, Maryland by 1670 \u2014 part of the great Scotch-Irish migration out of the Scottish lowlands. \u201cMcNew\u201d is the American spelling that English clerks gave the Gaelic name across three generations of Marylanders.',
+        'His descendant Shadrack Daniel McNew, born in 1745, carried the family down the Shenandoah Valley \u2014 the same wagon road Daniel Boone traveled \u2014 reaching Greene County, Tennessee by 1780. Thousands of families followed that corridor south, looking for cheap land and room to build.',
+        'Shadrack\u2019s son Elijah McNew, born 1770, married Joanna Bowman on March 19, 1801, a union recorded in the Greene County register as entry #729. Elijah made the last Appalachian move, south into DeKalb County, Alabama on the brow of Lookout Mountain, where he died in 1835. The 1830 census still finds the family in Sevier County, Tennessee \u2014 the country that would become Pigeon Forge and Gatlinburg.'
+      ],
+      items: [
+        { src: 'images/1830-census-elijah-sevier-tn.jpg', type: 'image', title: '1830 U.S. Census \u2014 Sevier County, Tennessee', caption: 'Elijah McNew enumerated near present-day Sevierville, at the gateway to the Great Smoky Mountains.' },
+        { src: 'images/elijah-joanna-marriage-1801.pdf', type: 'pdf', title: 'Elijah & Joanna Bowman \u2014 Marriage Record, 1801', caption: 'Greene County, Tennessee marriage register, entry #729 \u00b7 19 March 1801.' }
+      ]
+    },
+    {
+      ordinal: 'Era II', range: '1836\u20131910',
+      title: 'Forged in Conflict',
+      figures: 'Elijah McNew Jr. \u00b7 William Henry McNew \u00b7 Amanda Corn McNew',
+      narrative: [
+        'Elijah McNew Jr., born about 1810, settled in Cherokee County, Alabama with his wife Sarah Jane \u201cSallie\u201d Melton and served in Armstrong\u2019s Company, North Alabama Mounted Volunteers, in the Second Seminole (Florida) War. His widow\u2019s pension named the unit and the war. He lived to ninety-four, dying January 30, 1896.',
+        'His son William Henry McNew, born February 1836 in DeKalb County, enlisted on August 19, 1861 in Company G, 19th Alabama Infantry, C.S.A. \u2014 entry #78 on the original muster roll. He fought four full years: Shiloh, Stones River, Chickamauga, Missionary Ridge, the Atlanta Campaign, Franklin, and Nashville, and was among the few who stood at the surrender in Salisbury, North Carolina.',
+        'Home from the war, William worked the DeKalb County coal mines and married Amanda Minerva \u201cMandie\u201d Corn on February 28, 1878. They raised seven children \u2014 the youngest, Solomon, born in 1885. Amanda drew a Confederate widow\u2019s pension into the 1930s for the service of a man who had walked from Shiloh to Salisbury and come home.'
+      ],
+      items: [
+        { src: 'images/william-civil-war-muster-roll.jpg', type: 'image', title: 'Civil War Muster Roll \u2014 19th Alabama Inf., Co. G', caption: 'William McNew listed as entry #78, Confederate States Army \u00b7 enlisted 19 August 1861.' },
+        { src: 'images/elijah-jr-soldier-service-1883.pdf', type: 'pdf', title: 'Soldier Service Record \u2014 Elijah McNew Jr., 1883', caption: 'Florida (Second Seminole) War service claim.' },
+        { src: 'images/elijah-jr-soldier-pension-1896.pdf', type: 'pdf', title: 'Soldier\u2019s Pension \u2014 Elijah McNew Jr., 1896', caption: 'Pension claim naming Armstrong\u2019s Company and the Second Seminole War.' },
+        { src: 'images/elijah-jr-1860-alabama-census.pdf', type: 'pdf', title: '1860 U.S. Census \u2014 Alabama', caption: 'Elijah McNew Jr.\u2019s household in Cherokee County, Alabama.' },
+        { src: 'images/william-amanda-marriage-1878.pdf', type: 'pdf', title: 'William & Amanda \u2014 Marriage Certificate, 1878', caption: 'DeKalb County Probate Court bond \u00b7 28 February 1878.' },
+        { src: 'images/william-amanda-marriage-cert.pdf', type: 'pdf', title: 'William & Amanda McNew \u2014 Marriage Record', caption: 'Probate Court marriage bond.' },
+        { src: 'images/amanda-confederate-pension.pdf', type: 'pdf', title: 'Confederate Widow\u2019s Pension \u2014 Amanda McNew', caption: 'Alabama pension for William Henry McNew\u2019s Confederate service.' },
+        { src: 'images/william-amanda-1900-census.pdf', type: 'pdf', title: '1900 U.S. Census \u2014 William & Amanda McNew', caption: '12th Census of the United States \u00b7 DeKalb County, Alabama.' }
+      ]
+    },
+    {
+      ordinal: 'Era III', range: '1885\u20131930s',
+      title: 'The Move to Georgia & Kentucky',
+      figures: 'Solomon \u201cTom\u201d McNew \u00b7 Chester Matheny \u00b7 James Morris & Pearl Duval',
+      narrative: [
+        'Solomon McNew \u2014 \u201cTom\u201d to the family \u2014 was born May 10, 1885 in DeKalb County, Alabama, the youngest child of William and Amanda. He grew up on Lookout Mountain and married Chester Matheny in Mentone, Alabama, in 1909. His WWI draft card, signed in his own hand on September 12, 1918, records him as a sawmill fireman at Arthur King\u2019s mill in Mentone \u2014 just fifteen days after his son Robert Lee was born.',
+        'In the early 1920s Solomon moved the family to LaFayette, Walker County, Georgia, where he worked as a carpenter building homes. He died in 1947 and was buried back on the Alabama mountain. His son Robert Lee \u2014 known to his own grandchildren as \u201cDaddy Mac\u201d \u2014 would carry the family name far beyond Lookout Mountain.',
+        'On Mildred\u2019s side runs the Kentucky line: James Morris married Pearl Duval in Glasgow, Barren County, Kentucky. The 1920 census finds the Morris family at Rocky Hill, and the 1940 census places them in Glasgow \u2014 the roots that would join the McNews a generation later through Mildred Morris, who married Robert Lee in 1942.'
+      ],
+      items: [
+        { src: 'images/solomon-draft-registration-1918.jpg', type: 'image', title: 'Solomon McNew \u2014 WWI Draft Registration, 1918', caption: 'Sawmill fireman, Mentone, Alabama \u00b7 signed in his own hand, 12 September 1918.' },
+        { src: 'images/solomon-tom-family-1918-photo.jpg', type: 'image', title: 'Solomon \u201cTom\u201d McNew & Family, c. 1918', caption: 'The McNew family photographed around the time of Solomon\u2019s draft registration.' },
+        { src: 'images/james-morris-pearl-duval-marriage.jpg', type: 'image', title: 'James Morris & Pearl Duval \u2014 Marriage Bond', caption: 'Glasgow, Barren County, Kentucky \u2014 Mildred Morris\u2019s parents.' },
+        { src: 'images/daddymac-draft-card.pdf', type: 'pdf', title: 'Solomon McNew \u2014 Draft Card', caption: 'WWI-era draft registration card.' },
+        { src: 'images/solomon-1920-census.pdf', type: 'pdf', title: '1920 U.S. Census \u2014 Solomon McNew', caption: 'Solomon \u201cTom\u201d McNew\u2019s household.' },
+        { src: 'images/solomon-tom-family-1918.pdf', type: 'pdf', title: 'Solomon McNew & Family \u2014 Document, 1918', caption: 'Family record.' },
+        { src: 'images/mcnew-brothers-photos.pdf', type: 'pdf', title: 'The McNew Brothers \u2014 Photographs', caption: 'Billy, Joe, Robert Lee, James; with Chester, Billy, Solomon and James.' },
+        { src: 'images/james-morris-1920-census-ky.pdf', type: 'pdf', title: '1920 Census \u2014 Morris Family, Kentucky', caption: 'Rocky Hill, Barren County, Kentucky.' }
+      ]
+    },
+    {
+      ordinal: 'Era IV', range: '1918\u20131945',
+      title: '\u201cDoc\u201d McNew & World War II',
+      figures: 'Robert Lee \u201cDoc\u201d / \u201cDaddy Mac\u201d McNew \u00b7 Billy & Joe McNew \u00b7 USS LST-839',
+      narrative: [
+        'Robert Lee McNew \u2014 the grandfather his grandchildren would know as \u201cDaddy Mac\u201d \u2014 was born August 28, 1918 in Mentone, Alabama, and grew up in LaFayette, Georgia. The medical aptitude that shaped his life began behind the counter at Cooper Drug Co. in LaFayette. He married Mildred M. Morris on July 2, 1942 and entered the Navy, rising to Pharmacist\u2019s Mate Third Class (PhM3c V6) \u2014 to his crewmates, simply \u201cDoc.\u201d',
+        'On December 6, 1944, Robert Lee stepped aboard the newly commissioned USS LST-839 in New Orleans, becoming a Plank Owner \u2014 an original crew member from the ship\u2019s first moment in commission. His name stands on the muster rolls of December 1944 and March 1945.',
+        'The ship sailed New Orleans to Panama, Pearl Harbor, Eniwetok, and Saipan, then to Okinawa. On April 17, 1945 LST-839 anchored at Kinmu Wan and beached under air attack the next day, opening her bow doors to discharge Seabees and heavy construction equipment under kamikaze raids. The War Diary records \u201cFlash Red\u201d and all hands to general quarters. The ship earned a Battle Star. By November 1945, she was carrying occupation forces; on December 28, 1945, she passed under the Golden Gate Bridge with 500 Pacific combat veterans aboard.',
+        'Robert Lee did not serve alone. His brother Billy McNew enlisted in the Army in 1941 and most likely served as a Warrant Officer. Brother Joe McNew attended Marquette University in Milwaukee on Navy ROTC, studying engineering, and was commissioned as an Ensign in February 1944. Brother James, born in 1934, was the only McNew brother too young to serve. Helen McNew, their sister, had died in 1928 at age fifteen. The LaFayette paper noted the McNew boys in service in 1943.'
+      ],
+      feature: {
+        kicker: 'The Man in the Sick Bay',
+        title: 'Robert Lee \u201cDoc\u201d McNew \u2014 The Pharmacist\u2019s Mate',
+        image: 'images/doc-mcnew-med-bay.png',
+        imageCaption: 'The dispensary aboard LST-839 \u2014 Doc\u2019s domain as the sole medical authority for the crew.',
+        points: [
+          { label: 'The Responsibility:', text: 'As the sole medical authority on a 328-foot LST carrying tanks, Seabees, and troops, Doc McNew operated without a full medical staff or hospital. He managed the ship\u2019s dispensary, ensured sanitation, and provided care for every man aboard.' },
+          { label: 'Combat Trauma:', text: 'During amphibious operations, the LST became a critical link in the survival chain. Doc stabilized wounded men under fire, administered morphine, managed blood plasma, and performed emergency procedures in the chaos of a beachhead landing.' },
+          { label: 'April 17\u201318, 1945 \u2014 Okinawa:', text: 'Amidst relentless kamikaze attacks, LST-839 beached at Kinmu Wan on the eastern coast of Okinawa. As the ship grounded, Doc was at the front lines of the ship\u2019s medical response, treating casualties as the Seabees and their equipment poured onto the beach to support the brutal ground campaign near Shuri.' }
+        ],
+        video: 'https://www.youtube.com/embed/ZpSuE9BYuj4'
+      },
+      items: [
+        { src: 'images/rl-mcnew-ww2-draft-card.jpg', type: 'image', title: 'Robert Lee McNew \u2014 WWII Draft Card', caption: 'Cooper Drug Co., LaFayette, Georgia \u00b7 born 28 August 1918, Mentone, Alabama.' },
+        { src: 'images/doc-mcnew-med-bay.png', type: 'image', title: 'Doc McNew \u2014 The Sick Bay', caption: 'The dispensary aboard LST-839 \u2014 Doc\u2019s domain as the sole medical authority for the crew.' },
+        { src: 'images/lst839-commissioning-1.jpg', type: 'image', title: 'USS LST-839 \u2014 Commissioning, 1944', caption: 'New Orleans, Louisiana \u00b7 6 December 1944 \u2014 the day Robert Lee became a Plank Owner.' },
+        { src: 'images/lst839-commissioning-2.jpg', type: 'image', title: 'USS LST-839 \u2014 Launch', caption: 'A second view of the ship at commissioning.' },
+        { src: 'images/lst839-pacific.png', type: 'image', title: 'USS LST-839 \u2014 Pacific Deployment', caption: 'New Orleans \u2192 Panama \u2192 Pearl Harbor \u2192 Eniwetok \u2192 Saipan \u2192 Okinawa, 1944\u20131945.' },
+        { src: 'images/muster-6-dec-1944.jpg', type: 'image', title: 'Muster Roll \u2014 6 December 1944', caption: 'McNew, Robert L., PhM3c \u00b7 received aboard on commissioning day (Plank Owner).' },
+        { src: 'images/muster-31-dec-1944.jpg', type: 'image', title: 'Muster Roll \u2014 31 December 1944', caption: 'McNew, Robert L., PhM3c \u00b7 USS LST-839.' },
+        { src: 'images/muster-31-mar-1945.jpg', type: 'image', title: 'Muster Roll \u2014 31 March 1945', caption: 'McNew, Robert L., PhM3c \u00b7 USS LST-839.' },
+        { src: 'images/war-diary-apr-17-1945.jpg', type: 'image', title: 'War Diary \u2014 17 April 1945', caption: 'Anchored in Kinmu Wan, Okinawa \u00b7 Flash Red \u00b7 all hands to general quarters.' },
+        { src: 'images/war-diary-apr-17-18-1945.jpg', type: 'image', title: 'War Diary \u2014 17\u201318 April 1945', caption: 'Beach landing and unloading under air attack \u00b7 Seabees and equipment discharged.' },
+        { src: 'images/rl-mcnew-navy-ww2.pdf', type: 'pdf', title: 'Robert Lee McNew \u2014 Navy Photo, WWII', caption: 'Pharmacist\u2019s Mate Third Class \u00b7 USS LST-839.' },
+        { src: 'images/walker-co-newspaper-1943.pdf', type: 'pdf', title: 'Walker County Newspaper \u2014 \u201cMcNew Boys,\u201d 1943', caption: 'The LaFayette paper notes Billy, Joe, and Robert Lee in service.' },
+        { src: 'images/walker-co-ga-1940-census.pdf', type: 'pdf', title: '1940 U.S. Census \u2014 Walker County, Georgia', caption: 'The McNews in LaFayette before the war.' },
+        { src: 'images/james-morris-1940-census-ky.pdf', type: 'pdf', title: '1940 Census \u2014 Morris Family, Kentucky', caption: 'Glasgow, Barren County, Kentucky \u2014 Mildred\u2019s family.' },
+        { src: 'images/helen-mcnew-death-certificate-1928.jpg', type: 'image', title: 'Helen McNew \u2014 Death Certificate, 1928', caption: 'Robert Lee\u2019s sister, Helen McNew, died at age 15 of illness.' }
+      ]
+    },
+    {
+      ordinal: 'Era V', range: '1946\u2013Present',
+      title: 'A Generation of Firsts',
+      figures: 'Robert Lee McNew \u00b7 The McNew Brothers \u00b7 Robert Morris McNew',
+      narrative: [
+        'Home through the Golden Gate at the end of 1945, Robert Lee enrolled at the University of Georgia on the GI Bill and earned a B.S. in Pharmacy in 1948, appearing in the senior class as \u201cR. L. McNew, LaFayette \u2014 B.S. Pharmacy Degree.\u201d His brother Joe also took an engineering degree at Marquette University in Milwaukee. Together, the brothers were almost certainly the first McNews to earn college degrees \u2014 a line three centuries deep without one.',
+        'Robert Lee opened McNew\u2019s Pharmacy in Ringgold, Catoosa County, Georgia, and ran it for thirty-six years. An October 1956 photograph gathers the brothers \u2014 Billy, Robert Lee, Joe, James, and Chester Matheny McNew \u2014 likely at Aunt Lucy\u2019s home in LaFayette. Billy, who had enlisted in the Army in 1941, was most likely a Warrant Officer by the end of the war. Joe the Navy-trained engineer. James, the youngest, the only brother who had not served.',
+        'Robert Lee died May 9, 2007 in Ringgold, at the age of eighty-eight. The line continues through his son Robert Morris McNew \u2014 the tenth documented generation \u2014 carrying the Morris name, and the Kentucky family, quietly forward. His grandson Dustin McNew served with the 167th Infantry, Alabama Army National Guard, deploying to Afghanistan \u2014 the eleventh generation to answer the call, and the first to do so under an Alabama flag fighting for, rather than against, the United States.'
+      ],
+      items: [
+        { src: 'images/rl-mcnew-uga-yearbook-1948.jpeg', type: 'image', title: 'University of Georgia \u2014 Senior Class, 1948', caption: 'R. L. McNew, LaFayette \u00b7 B.S. Pharmacy Degree, made possible by the GI Bill.' },
+        { src: 'images/mcnew-brothers-1956-lafayette.jpg', type: 'image', title: 'The McNew Brothers \u2014 October 1956', caption: 'Robert Lee, Billy, Joe, James and Chester Matheny McNew \u00b7 likely Aunt Lucy\u2019s home, LaFayette, Georgia.' },
+        { src: 'images/167-infantry-returns-montgomery-1919.jpg', type: 'image', title: '167th Infantry Returns to Montgomery, 1919', caption: 'The 167th Infantry \u2014 formerly the 4th Alabama \u2014 returns home after WWI. Dustin McNew would deploy with this regiment nearly a century later.' },
+        { src: 'images/mcnew-family-1956-lafayette.pdf', type: 'pdf', title: 'McNew Family \u2014 Document, October 1956', caption: 'The brothers gathered in LaFayette, Georgia.' }
+      ]
+    }
+  ];
+
+  var SERVICE_MEMBERS = [
+    { war: 'Second Seminole War \u00b7 1835\u20131842', name: 'Elijah McNew Jr.', rank: 'Private, Armstrong\u2019s Company, North Alabama Mounted Volunteers', body: 'Fought in the Florida (Second Seminole) War. His widow later successfully petitioned for a soldier\u2019s pension in 1896, naming the unit and the conflict. He lived to ninety-four.' },
+    { war: 'Civil War \u00b7 1861\u20131865', name: 'William Henry McNew', rank: 'Private, Company G, 19th Alabama Infantry, C.S.A.', body: 'Enlisted August 19, 1861. Fought at Shiloh, Stones River, Chickamauga, Missionary Ridge, the Atlanta Campaign, Franklin, and Nashville. One of the few who survived four years of the Western Theater and stood at the surrender in Salisbury, North Carolina.' },
+    { war: 'World War I \u00b7 Draft Registration, 1918', name: 'Solomon \u201cTom\u201d McNew', rank: 'Registered \u00b7 Sawmill Fireman, Mentone, Alabama', body: 'Registered for the WWI draft on September 12, 1918 \u2014 fifteen days after his son Robert Lee was born. Records do not confirm active service; he may have been exempt as an industrial worker.' },
+    { war: 'World War II \u00b7 1941\u20131945', name: 'Billy McNew', rank: 'U.S. Army \u00b7 Warrant Officer (probable)', body: 'Enlisted 1941. Most likely achieved the rank of Warrant Officer. Served through the war years. One of three McNew brothers to serve in World War II.' },
+    { war: 'World War II \u00b7 1942\u20131946', name: 'Joe McNew', rank: 'Ensign, U.S. Navy \u00b7 NROTC, Marquette University', body: 'Studied engineering at Marquette University in Milwaukee on Navy ROTC. Commissioned as an Ensign in February 1944. One of the first McNews to earn a college degree, setting a precedent his brother Robert Lee would follow on the GI Bill.' },
+    { war: 'World War II \u00b7 1944\u20131946', name: 'Robert Lee \u201cDoc\u201d McNew', rank: 'Pharmacist\u2019s Mate Third Class (PhM3c V6), U.S. Navy', body: 'Plank Owner of USS LST-839. Sole medical authority for his crew on a 328-foot amphibious ship. Participated in the Okinawa Campaign \u2014 Battle of Kinmu Wan, April 17\u201318, 1945. The ship earned a Battle Star. Returned home December 28, 1945 through the Golden Gate.' },
+    { war: 'Global War on Terror \u00b7 Afghanistan', name: 'Dustin McNew', rank: '167th Infantry, Alabama Army National Guard', body: 'Deployed to Afghanistan with the 167th Infantry, ALARNG \u2014 a regiment that traces its heritage to the 4th Alabama Volunteer Infantry of the Civil War. The eleventh documented generation of McNews to serve, and the first under an Alabama flag fighting for the United States.' }
+  ];
+
+  // ── STATE ───────────────────────────────────────────────────
+  var state = { era: 0, lb: null, lbItems: [], view: 'chronicle' };
+
+  // ── INIT ────────────────────────────────────────────────────
+  function init() {
+    renderTimeline();
+    renderEra(0);
+    renderService();
+    bindEvents();
+  }
+
+  // ── TIMELINE ────────────────────────────────────────────────
+  function renderTimeline() {
+    var el = document.getElementById('timeline-btns');
+    el.innerHTML = ERAS.map(function(era, i) {
+      return '<button class="era-btn' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '">' +
+        '<div class="era-dot"></div>' +
+        '<div class="era-range">' + era.range + '</div>' +
+        '<div class="era-title">' + era.title + '</div>' +
+        '</button>';
+    }).join('');
+  }
+
+  // ── ERA CONTENT ─────────────────────────────────────────────
+  function renderEra(idx) {
+    state.era = idx;
+    var era = ERAS[idx];
+
+    // Update active dot
+    var btns = document.querySelectorAll('.era-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', i === idx);
+    }
+
+    // Narrative HTML
+    var featureHTML = '';
+    if (era.feature) {
+      var f = era.feature;
+      var pointsHTML = f.points.map(function(pt) {
+        return '<div class="feature-point"><div class="feature-point-dot"></div><div class="feature-point-text"><strong>' + pt.label + '</strong> ' + pt.text + '</div></div>';
+      }).join('');
+      var videoHTML = '';
+      if (f.video) {
+        videoHTML = '<div class="feature-video"><div class="feature-video-label">Historical Context \u00b7 Battle of Okinawa</div><iframe src="' + f.video + '" title="Okinawa WWII footage" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>';
+      }
+      var heroHTML = '';
+      if (f.image) {
+        heroHTML = '<div style="position:relative;aspect-ratio:16/7;overflow:hidden;"><img src="' + f.image + '" alt="' + f.kicker + '" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.55);"><div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:22px 26px;background:linear-gradient(to top,rgba(14,22,38,.85) 0%,transparent 60%);"><div style="font-family:Archivo,sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#C7A659;font-weight:700;margin-bottom:6px;">' + f.kicker + '</div><div style="font-family:Merriweather,serif;font-weight:900;font-size:18px;color:#EDE4CB;line-height:1.2;">' + f.title + '</div><div style="font-family:Merriweather,serif;font-style:italic;font-size:12px;color:#B9C2D2;margin-top:5px;">' + (f.imageCaption || '') + '</div></div></div>';
+      }
+      featureHTML = '<div class="feature-block">' + heroHTML + '<div class="feature-inner"><div class="feature-kicker">' + f.kicker + '</div><h3 class="feature-title">' + f.title + '</h3><div class="feature-points">' + pointsHTML + '</div></div>' + videoHTML + '</div>';
+    }
+
+    var narrativeHTML = '<div class="era-ordinal">' + era.ordinal + ' &middot; ' + era.range + '</div>' +
+      '<h2 class="era-heading">' + era.title + '</h2>' +
+      '<div class="figures-block"><div class="figures-label">Key Figures</div><div class="figures-text">' + era.figures + '</div></div>' +
+      '<div class="narrative-body">' + era.narrative.map(function(p){ return '<p>' + p + '</p>'; }).join('') + '</div>' +
+      featureHTML;
+
+    // Gallery HTML
+    var galleryHTML = '<div class="gallery-head">' +
+      '<span class="gallery-head-title">Documents &amp; Photographs</span>' +
+      '<span class="gallery-head-count">' + era.items.length + ' ITEMS</span>' +
+      '</div>' +
+      '<div class="gallery-grid">' +
+      era.items.map(function(item, i) {
+        var thumb = item.type === 'image'
+          ? '<div class="tile-img-wrap"><img src="' + item.src + '" alt="' + item.title + '" loading="lazy"></div>'
+          : '<div class="tile-pdf-wrap"><div class="pdf-icon"><span>PDF</span></div></div>';
+        return '<button class="tile" data-era="' + idx + '" data-item="' + i + '">' + thumb +
+          '<div class="tile-meta"><div class="tile-kind">' + (item.type === 'image' ? 'Photograph' : 'Document') + '</div>' +
+          '<div class="tile-name">' + item.title + '</div></div></button>';
+      }).join('') +
+      '</div>';
+
+    var wrap = document.getElementById('era-content');
+    wrap.innerHTML = '<div style="animation:fadein .38s ease both">' + narrativeHTML + '</div>' +
+      '<div style="animation:fadein .38s ease both .06s">' + galleryHTML + '</div>';
+  }
+
+  // ── SERVICE ─────────────────────────────────────────────────
+  function renderService() {
+    var el = document.getElementById('service-cards');
+    el.innerHTML = SERVICE_MEMBERS.map(function(m) {
+      return '<div class="service-card">' +
+        '<div class="service-card-war">' + m.war + '</div>' +
+        '<div class="service-card-name">' + m.name + '</div>' +
+        '<div class="service-card-rank">' + m.rank + '</div>' +
+        '<div class="service-card-body">' + m.body + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  // ── LIGHTBOX ─────────────────────────────────────────────────
+  function openLb(items, idx) {
+    state.lb = idx; state.lbItems = items;
+    showLb();
+    document.getElementById('lightbox').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLb() {
+    state.lb = null; state.lbItems = [];
+    document.getElementById('lightbox').classList.add('hidden');
+    document.getElementById('lb-media').innerHTML = '';
+    document.body.style.overflow = '';
+  }
+  function moveLb(d) {
+    if (state.lb === null) return;
+    var n = state.lbItems.length;
+    state.lb = (state.lb + d + n) % n;
+    showLb();
+  }
+  function showLb() {
+    var item = state.lbItems[state.lb];
+    var n = state.lbItems.length;
+    document.getElementById('lb-counter').textContent = (state.lb + 1) + ' / ' + n;
+    document.getElementById('lb-title').textContent = item.title;
+    document.getElementById('lb-caption').textContent = item.caption;
+    document.getElementById('lb-open').href = item.src;
+    var media = document.getElementById('lb-media');
+    if (item.type === 'image') {
+      media.innerHTML = '<img src="' + item.src + '" alt="' + item.title + '">';
+    } else {
+      media.innerHTML = '<iframe src="' + item.src + '#toolbar=1" title="' + item.title + '" allowfullscreen></iframe>';
+    }
+  }
+
+  // ── EVENTS ───────────────────────────────────────────────────
+  function bindEvents() {
+    // View switcher
+    document.querySelectorAll('.view-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var v = btn.getAttribute('data-view');
+        document.querySelectorAll('.view-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById('view-chronicle').classList.toggle('hidden', v !== 'chronicle');
+        document.getElementById('view-service').classList.toggle('hidden', v !== 'service');
+      });
+    });
+
+    // Era timeline (delegated)
+    document.getElementById('timeline-btns').addEventListener('click', function(e) {
+      var btn = e.target.closest('.era-btn');
+      if (!btn) return;
+      renderEra(parseInt(btn.getAttribute('data-idx')));
+    });
+
+    // Gallery tiles (delegated)
+    document.getElementById('era-content').addEventListener('click', function(e) {
+      var tile = e.target.closest('.tile');
+      if (!tile) return;
+      var eraIdx = parseInt(tile.getAttribute('data-era'));
+      var itemIdx = parseInt(tile.getAttribute('data-item'));
+      openLb(ERAS[eraIdx].items, itemIdx);
+    });
+
+    // Lightbox controls
+    document.getElementById('lb-close').addEventListener('click', closeLb);
+    document.getElementById('lb-prev').addEventListener('click', function(){ moveLb(-1); });
+    document.getElementById('lb-next').addEventListener('click', function(){ moveLb(1); });
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLb();
+    });
+    document.getElementById('lb-body').addEventListener('click', function(e){ e.stopPropagation(); });
+
+    // Keyboard
+    document.addEventListener('keydown', function(e) {
+      if (state.lb === null) return;
+      if (e.key === 'Escape') closeLb();
+      if (e.key === 'ArrowLeft') moveLb(-1);
+      if (e.key === 'ArrowRight') moveLb(1);
+    });
+  }
+
+  // Support both bundled (DOMContentLoaded already fired) and direct-open
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
